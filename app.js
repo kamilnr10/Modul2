@@ -12,7 +12,43 @@
 // Obiekt charakteryzujący grupę kontaktów:
 // Ma mieć: listę kontaktów
 // Ma umożliwiać: Create/Read/Update/Remove (CRUD)
-let idCounter = 0;
+
+// najpierw musisz stworzyć 3 obiekty jako niezależne
+// a potem dopiero łączyć je w pewne grupy/akcje
+// myślę że to książka powinna tworzyć kontakt
+// oraz ksiązka powinna przypisywać kontakt do grupy
+
+// Kazda klasa czy funkcja powinna mieć tylko jedną odpowiedzialność
+
+class AdressBook {
+  constructor() {
+    this.contacts = [];
+    this.groups = [];
+  }
+
+  addContact(contact) {
+    this.contacts.push(contact);
+  }
+
+  addGroup(group) {
+    this.groups.push(group);
+  }
+
+  createContact(name, surname, email) {
+    const contact = {
+      name: name,
+      surname: surname,
+      email: email,
+      date: new Date()
+    };
+    return this.contacts.push(contact);
+  }
+
+  deleteContact(index) {
+    this.contacts.splice(index, 1);
+    return;
+  }
+}
 
 class Contact {
   constructor(name, surname, email) {
@@ -22,23 +58,18 @@ class Contact {
     this.date = new Date();
   }
 
-  createContact() {
-    const contact = {
-      name: this.name,
-      surname: this.surname,
-      email: this.email,
-      date: this.date
-    };
-    return contact;
+  get fullInformation() {
+    return `${this.name} ${this.surname}
+        ${this.email}
+        ${this.date}`;
   }
 
-  showContact() {
-    return `
-    Name: ${this.name};
-    Surname: ${this.surname};
-    Email: ${this.email};
-    Date: ${this.date}
-`;
+  set fullInformation(contactInformation) {
+    const nameParts = contactInformation.split(" ");
+    this.name = nameParts[0];
+    this.surname = nameParts[1];
+    this.email = nameParts[2];
+    this.date = new Date();
   }
 }
 
@@ -51,22 +82,6 @@ class GroupOfContacts {
   }
 }
 
-class AdressBook {
-  constructor() {
-    this.contacts = [];
-    this.groups = [];
-  }
-
-  addContact(contact) {
-    contact.id = idCounter++;
-    this.contacts.push(contact);
-  }
-
-  addGroup(group) {
-    this.groups.push(group);
-  }
-}
-
 const contact1 = new Contact("Kamil", "Nowak", "kamil.nr10@gmail.com");
 const contact2 = new Contact("Tomek", "Bolek", "ktommynr10@gmail.com");
 const contact3 = new Contact("Olek", "Fafi", "udyr@gmail.com");
@@ -75,5 +90,5 @@ const group2 = new GroupOfContacts(contact3);
 const adressBook1 = new AdressBook();
 adressBook1.addContact(contact1);
 adressBook1.addContact(contact2);
-// adressBook1.addContact(contact3);
+adressBook1.createContact("Lexi", "Tobi", "tobimobi@wp.pl");
 adressBook1.addGroup(group1);
