@@ -28,25 +28,36 @@ class AdressBook {
 
   addContact(contact) {
     this.contacts.push(contact);
+    return this.contacts;
   }
 
   addGroup(group) {
     this.groups.push(group);
+    return this.groups;
   }
 
   createContact(name, surname, email) {
-    const contact = {
-      name: name,
-      surname: surname,
-      email: email,
-      date: new Date()
-    };
-    return this.contacts.push(contact);
+    const contact = new Contact(name, surname, email);
+    this.contacts.push(contact);
+    return contact;
   }
 
-  deleteContact(index) {
-    this.contacts.splice(index, 1);
-    return;
+  readContact(list, index) {
+    if (list === "contacts") {
+      return this.contacts[index];
+    } else if (list === "groups") {
+      return this.groups[index];
+    }
+  }
+
+  deleteContact(list, index) {
+    if (list === "contacts") {
+      this.contacts.splice(index, 1);
+      return this.contacts, "contact deleted";
+    } else if (list === "groups") {
+      this.groups.splice(index, 1);
+      return this.groups, "contact deleted";
+    }
   }
 }
 
@@ -92,3 +103,4 @@ adressBook1.addContact(contact1);
 adressBook1.addContact(contact2);
 adressBook1.createContact("Lexi", "Tobi", "tobimobi@wp.pl");
 adressBook1.addGroup(group1);
+adressBook1.addGroup(group2);
