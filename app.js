@@ -20,6 +20,8 @@
 
 // Kazda klasa czy funkcja powinna mieć tylko jedną odpowiedzialność
 
+const idd = uuidv4();
+
 class AdressBook {
   constructor() {
     this.contacts = [];
@@ -50,14 +52,28 @@ class AdressBook {
     }
   }
 
-  deleteContact(list, index) {
-    if (list === "contacts") {
-      this.contacts.splice(index, 1);
-      return this.contacts, "contact deleted";
-    } else if (list === "groups") {
-      this.groups.splice(index, 1);
-      return this.groups, "contact deleted";
+  //   deleteContact(list, index) {
+  //     if (list === "contacts") {
+  //       this.contacts.splice(index, 1);
+  //       return this.contacts, "contact deleted";
+  //     } else if (list === "groups") {
+  //       this.groups.splice(index, 1);
+  //       return this.groups, "contact from Groups deleted";
+  //     }
+  //   }
+
+  deleteDuplicate(value) {
+    if (this.contacts.includes(value) && this.groups.includes(value)) {
+      this.contacts = this.contacts.filter(item => {
+        return item.id !== value;
+      });
     }
+  }
+
+  deleteContact(value) {
+    this.contacts = this.contacts.filter(item => {
+      return item.id !== value;
+    });
   }
 }
 
@@ -67,6 +83,7 @@ class Contact {
     this.surname = surname;
     this.email = email;
     this.date = new Date();
+    this.id = uuidv4().substr(3, 3);
   }
 
   get fullInformation() {
