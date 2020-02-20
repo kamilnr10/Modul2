@@ -20,8 +20,6 @@
 
 // Kazda klasa czy funkcja powinna mieć tylko jedną odpowiedzialność
 
-const idd = uuidv4();
-
 class AdressBook {
   constructor() {
     this.contacts = [];
@@ -62,17 +60,24 @@ class AdressBook {
   //     }
   //   }
 
-  deleteDuplicate(value) {
-    if (this.contacts.includes(value) && this.groups.includes(value)) {
-      this.contacts = this.contacts.filter(item => {
-        return item.id !== value;
-      });
-    }
+  deleteContact(value) {
+    // deleteContactFromGroup()
+    this.contacts = this.contacts.filter(item => {
+      console.log(item.id);
+      return item.id !== value;
+    });
   }
 
-  deleteContact(value) {
-    this.contacts = this.contacts.filter(item => {
-      return item.id !== value;
+  deleteContactFromGroup(value) {
+    this.groups = this.groups.map(elem => {
+      console.log(elem);
+      console.log(elem.group);
+      return elem.group.filter(item => {
+        console.log(item.id);
+        return item.id !== value;
+      });
+      //   // return item.id !== value;
+      // });
     });
   }
 }
