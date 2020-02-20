@@ -50,34 +50,19 @@ class AdressBook {
     }
   }
 
-  //   deleteContact(list, index) {
-  //     if (list === "contacts") {
-  //       this.contacts.splice(index, 1);
-  //       return this.contacts, "contact deleted";
-  //     } else if (list === "groups") {
-  //       this.groups.splice(index, 1);
-  //       return this.groups, "contact from Groups deleted";
-  //     }
-  //   }
-
   deleteContact(value) {
-    // deleteContactFromGroup()
     this.contacts = this.contacts.filter(item => {
       console.log(item.id);
       return item.id !== value;
     });
-  }
-
-  deleteContactFromGroup(value) {
-    this.groups = this.groups.map(elem => {
-      console.log(elem);
-      console.log(elem.group);
-      return elem.group.filter(item => {
-        console.log(item.id);
-        return item.id !== value;
+    console.log(this.groups);
+    this.groups = this.groups.filter(item => {
+      console.log(item.group);
+      return item.group.filter(el => {
+        console.log(el);
+        console.log(el.id == value);
+        return el.id !== value;
       });
-      //   // return item.id !== value;
-      // });
     });
   }
 }
@@ -112,6 +97,12 @@ class GroupOfContacts {
   }
   addMember(newMember) {
     this.group.push(newMember);
+  }
+
+  deleteContactFromGroup(value) {
+    this.group = this.group.filter(item => {
+      return item.id !== value;
+    });
   }
 }
 
