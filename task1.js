@@ -74,6 +74,26 @@ class AdressBook {
       });
     });
   }
+
+  sortBy(property) {
+    function dynamicSort() {
+      let sortOrder = 1;
+
+      if (property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+      }
+
+      return function(a, b) {
+        if (sortOrder == -1) {
+          return b[property].localeCompare(a[property]);
+        } else {
+          return a[property].localeCompare(b[property]);
+        }
+      };
+    }
+    this.contacts.sort(dynamicSort(property));
+  }
 }
 
 class Contact {
@@ -115,9 +135,9 @@ class GroupOfContacts {
   }
 }
 
-const contact1 = new Contact("Kamil", "Nowak", "kamil.nr10@gmail.com");
-const contact2 = new Contact("Tomek", "Bolek", "ktommynr10@gmail.com");
-const contact3 = new Contact("Olek", "Fafi", "udyr@gmail.com");
+const contact1 = new Contact("Kamil", "Nowak", "kamilnowak0@gmail.com");
+const contact2 = new Contact("Zlatan", "Alek", "zlatanalek@gmail.com");
+const contact3 = new Contact("Olek", "Fafi", "olekafi@gmail.com");
 const group1 = new GroupOfContacts(contact1, contact2);
 const group2 = new GroupOfContacts(contact3);
 const adressBook1 = new AdressBook();
