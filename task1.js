@@ -23,8 +23,8 @@
 // O - Klasy powinny być zamknięte na modyfikacje, ale otwarte na rozszerzenia.
 // to znaczy, ze powiniśmy pisać takie klasy, które mozna rozszerzyć bez modyfikacji ich kodu źródłowego (np. poprzez dziedziczenie)
 // L - Kiedy dziedziczymy po danej klasie to musimy mieć pewność
-// ze robimy to w taki sposób , ze implementując nie zmieniamy
-// funkcjonalności naszej klasy bazowej.
+// ze robimy to w taki sposób , ze implementując jakąś funkcję nie zmieniamy
+// funkcjonalności naszej klasy bazowej. Klasy dziedziczące nie więdzą o sobie
 // I - powinniśmy mieć wiele dedykowanych interfejsów / metod
 // zamiast jednej ogólnej. Np. w obiekcie Kalkulator powinny znajdować się metody .add .substract .multiply .divide zamiast jednej ogólnej
 // D - tego nie rozumiem
@@ -64,19 +64,15 @@ class AdressBook {
       return item.id !== value;
     });
 
-    this.groups = this.groups.map(item => {
-      console.log(item.__proto__);
-      // return item.__proto__.deleteContactFromGroup(value);
+    this.groups = this.groups.filter(item => {
+      console.log(item);
+      return item.group.filter(el => {
+        console.log(el.id == value);
+        if (el.id === value) {
+          return el.id !== value;
+        }
+      });
     });
-    // this.groups = this.groups.filter(item => {
-    //   console.log(item.group);
-    //   return item.group.filter(el => {
-    //     console.log(el.id == value);
-    //     if (el.id === value) {
-    //       return el.id !== value;
-    //     }
-    //   });
-    // });
   }
 }
 
