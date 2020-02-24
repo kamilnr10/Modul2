@@ -71,6 +71,16 @@ class AdressBook {
     return `${listOfContacts}`;
   }
 
+  updateContact(id, name, surname, email) {
+    const contact = this.contacts.filter(item => item.id === id);
+    console.log(contact);
+    for (let item of contact) {
+      console.log(item);
+      return item.updateContact(name, surname, email);
+    }
+    return `Contact was updated`;
+  }
+
   deleteContact(id) {
     this.contacts = this.contacts.filter(contact => contact.id !== id);
     // this.groups = this.groups.filter(group => {
