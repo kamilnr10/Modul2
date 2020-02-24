@@ -122,10 +122,10 @@ class Contact {
     this.date = new Date();
   }
 
-  updateContact(newName, newSurname, newEmail) {
-    this.name = newName;
-    this.surname = newSurname;
-    this.email = newEmail;
+  updateContact(name, surname, email) {
+    this.name = name;
+    this.surname = surname;
+    this.email = email;
     this.date = new Date();
     return `Contact with ID: ${this.id} was updated`;
   }
@@ -173,12 +173,12 @@ class GroupOfContacts {
     return `${listOfContacts}`;
   }
 
-  updateContact(id, newName, newSurname, newEmail) {
+  updateContact(id, name, surname, email) {
     // console.log(this.contacts);
     const contact = this.contacts.filter(contact => contact.id === id);
     console.log(contact);
     for (let person of contact)
-      return person.updateContact(newName, newSurname, newEmail);
+      return person.updateContact(name, surname, email);
   }
 }
 
