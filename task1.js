@@ -51,26 +51,31 @@ class AdressBook {
     return `Contact was created`;
   }
 
-  readContact(phrase) {
-    const findContact = this.contacts.filter(contact =>
-      JSON.stringify(contact).includes(phrase) ? contact : null
+  readContact(text) {
+    const contact = this.contacts.filter(contact =>
+      JSON.stringify(contact).includes(text) ? contact : null
     );
-
-    if (phrase.length === 0 && phrase.length <= 2) {
+    console.log(contact);
+    if (text.length === 0 && text.length <= 2) {
       return this.contacts;
     }
-
-    return findContact.forEach(contact => {
-      return console.log(contact.readContact());
-    });
+    for (let person of contact) {
+      return person.readContact();
+    }
   }
 
   readAllContacts() {
-    return this.contacts;
+    const listOfContacts = this.contacts.map(item => {
+      return `\n ID: ${item.id} Name: ${item.name} Surname:${item.surname} Email: ${item.email} Date: ${item.date} `;
+    });
+    return `${listOfContacts}`;
   }
 
   deleteContact(id) {
     this.contacts = this.contacts.filter(contact => contact.id !== id);
+    // this.groups = this.groups.filter(group => {
+    //   group.deleteContactFromGroup(id);
+    // });
     this.groups = this.groups.map(group =>
       group.contacts.filter(contact => {
         contact.id !== id;
@@ -80,7 +85,10 @@ class AdressBook {
   }
 
   deleteGroup(id) {
-    console.log(this.groups);
+    this.groups = this.groups.filter(group => {
+      return group.id !== id;
+    });
+    return `Group was deleted`;
   }
 
   sortBy(property) {
@@ -101,29 +109,16 @@ class AdressBook {
       };
     };
     this.contacts.sort(dynamicSort(property));
+    return `Contacts sorted by ${property}`;
   }
 }
 
 class Contact {
   constructor(name, surname, email) {
+    this.id = uuidv4().substr(3, 3);
     this.name = name;
     this.surname = surname;
     this.email = email;
-    this.date = new Date();
-    this.id = uuidv4().substr(3, 3);
-  }
-
-  get fullInformation() {
-    return `${this.name} ${this.surname}
-        ${this.email}
-        ${this.date}`;
-  }
-
-  set fullInformation(contactInformation) {
-    const nameParts = contactInformation.split(" ");
-    this.name = nameParts[0];
-    this.surname = nameParts[1];
-    this.email = nameParts[2];
     this.date = new Date();
   }
 
@@ -132,15 +127,15 @@ class Contact {
     this.surname = newSurname;
     this.email = newEmail;
     this.date = new Date();
-    return console.log(`Contact with ID: ${this.id} was updated`);
+    return `Contact with ID: ${this.id} was updated`;
   }
 
   readContact() {
-    return `Contact ID: ${this.id},
-    name: ${this.name},
-    surname: ${this.surname},
-    email: ${this.email},
-    date: ${this.date.toLocaleString()}`;
+    return JSON.stringify(
+      `Contact ID: ${this.id} name: ${this.name} surname: ${
+        this.surname
+      }  email: ${this.email} date: ${this.date.toLocaleString()}`
+    );
   }
 }
 
@@ -150,7 +145,7 @@ class GroupOfContacts {
     this.group = name;
     this.contacts = [];
   }
-  addMember(newMember) {
+  addNewContact(newMember) {
     this.contacts.push(newMember);
   }
 
@@ -162,13 +157,28 @@ class GroupOfContacts {
 
   createContact(name, surname, email) {
     const contact = {
+      id: uuidv4().substr(3, 3),
       name: name,
       surname: surname,
       email: email,
-      date: new Date(),
-      id: uuidv4().substr(3, 3)
+      date: new Date()
     };
     this.contacts.push(contact);
+  }
+
+  readContacts() {
+    const listOfContacts = this.groups.map(item => {
+      return `\n ID: ${item.id} Name: ${item.name} Surname:${item.surname} Email: ${item.email} Date: ${item.date} `;
+    });
+    return `${listOfContacts}`;
+  }
+
+  updateContact(id, newName, newSurname, newEmail) {
+    // console.log(this.contacts);
+    const contact = this.contacts.filter(contact => contact.id === id);
+    console.log(contact);
+    for (let person of contact)
+      return person.updateContact(newName, newSurname, newEmail);
   }
 }
 
@@ -176,10 +186,13 @@ const contact1 = new Contact("Kamil", "Nowak", "kamilnowak0@gmail.com");
 const contact2 = new Contact("Zlatan", "Alek", "zlatanalek@gmail.com");
 const contact3 = new Contact("Olek", "Fafi", "olekafi@gmail.com");
 const group1 = new GroupOfContacts("family");
-group1.addMember(contact1);
-group1.addMember(contact2);
+const group2 = new GroupOfContacts("friends");
+group1.addNewContact(contact1);
+group1.addNewContact(contact2);
+group2.addNewContact(contact3);
 const adressBook1 = new AdressBook();
 adressBook1.addContact(contact1);
 adressBook1.addContact(contact2);
 adressBook1.createNewContact("Lexi", "Tobi", "tobimobi@wp.pl");
 adressBook1.addGroup(group1);
+adressBook1.addGroup(group2);
