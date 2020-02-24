@@ -60,19 +60,12 @@ class AdressBook {
   }
 
   deleteContact(value) {
-    this.contacts = this.contacts.filter(item => {
-      return item.id !== value;
-    });
+    this.contacts = this.contacts.filter(item => item.id !== value);
 
-    this.groups = this.groups.filter(item => {
-      console.log(item);
-      return item.group.filter(el => {
-        console.log(el.id == value);
-        if (el.id === value) {
-          return el.id !== value;
-        }
-      });
-    });
+    this.groups = this.groups.map(
+      group => group.group.filter(contact => contact.id !== value)
+      //   group.contacts.filter(contact => contact.id !== id)
+    );
   }
 
   sortBy(property) {
@@ -118,18 +111,35 @@ class Contact {
     this.email = nameParts[2];
     this.date = new Date();
   }
+
+  updateContact(newName, newSurname, newEmail) {
+    this.name = newName;
+    this.surname = newSurname;
+    this.email = newEmail;
+    this.date = new Date();
+    return console.log(`Contact with ID: ${this.id} was updated`);
+  }
+
+  readContact() {
+    return `Contact ID: ${this.id},
+    name: ${this.name},
+    surname: ${this.surname},
+    email: ${this.email},
+    date: ${this.date.toLocaleString()}`;
+  }
 }
 
 class GroupOfContacts {
-  constructor(...group) {
-    this.group = group;
+  constructor(name) {
+    this.group = name;
+    this.contacts = [];
   }
   addMember(newMember) {
-    this.group.push(newMember);
+    this.contacts.push(newMember);
   }
 
   deleteContactFromGroup(value) {
-    this.group = this.group.filter(item => {
+    this.contacts = this.contacts.filter(item => {
       return item.id !== value;
     });
   }
@@ -138,11 +148,10 @@ class GroupOfContacts {
 const contact1 = new Contact("Kamil", "Nowak", "kamilnowak0@gmail.com");
 const contact2 = new Contact("Zlatan", "Alek", "zlatanalek@gmail.com");
 const contact3 = new Contact("Olek", "Fafi", "olekafi@gmail.com");
-const group1 = new GroupOfContacts(contact1, contact2);
-const group2 = new GroupOfContacts(contact3);
+const group1 = new GroupOfContacts("family");
+group1.addMember(contact1);
 const adressBook1 = new AdressBook();
 adressBook1.addContact(contact1);
 adressBook1.addContact(contact2);
 adressBook1.createContact("Lexi", "Tobi", "tobimobi@wp.pl");
 adressBook1.addGroup(group1);
-adressBook1.addGroup(group2);
