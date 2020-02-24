@@ -60,18 +60,11 @@ class AdressBook {
   }
 
   deleteContact(value) {
-    this.contacts = this.contacts.filter(item => {
-      return item.id !== value;
-    });
+    this.contacts = this.contacts.filter(item => item.id !== value);
 
-    this.groups = this.groups.filter(item => {
-      console.log(item);
-      return item.group.filter(el => {
-        console.log(el.id == value);
-        if (el.id === value) {
-          return el.id !== value;
-        }
-      });
+    this.groups = this.groups.map(item => 
+      item.group.filter(el => el.id !== value;
+      );
     });
   }
 sortContactsBy(property) {
