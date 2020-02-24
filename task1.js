@@ -45,31 +45,46 @@ class AdressBook {
     return this.groups;
   }
 
-  createContact(name, surname, email) {
+  createNewContact(name, surname, email) {
     const contact = new Contact(name, surname, email);
     this.contacts.push(contact);
-    return contact;
+    return `Contact was created`;
   }
 
-  readContact(list, index) {
-    if (list === "contacts") {
-      return this.contacts[index];
-    } else if (list === "groups") {
-      return this.groups[index];
-    }
-  }
-
-  deleteContact(value) {
-    this.contacts = this.contacts.filter(item => item.id !== value);
-
-    this.groups = this.groups.map(
-      group => group.group.filter(contact => contact.id !== value)
-      //   group.contacts.filter(contact => contact.id !== id)
+  readContact(phrase) {
+    const findContact = this.contacts.filter(contact =>
+      JSON.stringify(contact).includes(phrase) ? contact : null
     );
+
+    if (phrase.length === 0 && phrase.length <= 2) {
+      return this.contacts;
+    }
+
+    return findContact.forEach(contact => {
+      return console.log(contact.readContact());
+    });
+  }
+
+  readAllContacts() {
+    return this.contacts;
+  }
+
+  deleteContact(id) {
+    this.contacts = this.contacts.filter(contact => contact.id !== id);
+    this.groups = this.groups.map(group =>
+      group.contacts.filter(contact => {
+        contact.id !== id;
+      })
+    );
+    return `Contact was deleted`;
+  }
+
+  deleteGroup(id) {
+    console.log(this.groups);
   }
 
   sortBy(property) {
-    function dynamicSort() {
+    const dynamicSort = () => {
       let sortOrder = 1;
 
       if (property[0] === "-") {
@@ -77,14 +92,14 @@ class AdressBook {
         property = property.substr(1);
       }
 
-      return function(a, b) {
+      return (a, b) => {
         if (sortOrder == -1) {
           return b[property].localeCompare(a[property]);
         } else {
           return a[property].localeCompare(b[property]);
         }
       };
-    }
+    };
     this.contacts.sort(dynamicSort(property));
   }
 }
@@ -131,6 +146,7 @@ class Contact {
 
 class GroupOfContacts {
   constructor(name) {
+    this.id = uuidv4().substr(3, 3);
     this.group = name;
     this.contacts = [];
   }
@@ -138,10 +154,21 @@ class GroupOfContacts {
     this.contacts.push(newMember);
   }
 
-  deleteContactFromGroup(value) {
+  deleteContactFromGroup(id) {
     this.contacts = this.contacts.filter(item => {
-      return item.id !== value;
+      return item.id !== id;
     });
+  }
+
+  createContact(name, surname, email) {
+    const contact = {
+      name: name,
+      surname: surname,
+      email: email,
+      date: new Date(),
+      id: uuidv4().substr(3, 3)
+    };
+    this.contacts.push(contact);
   }
 }
 
@@ -150,8 +177,9 @@ const contact2 = new Contact("Zlatan", "Alek", "zlatanalek@gmail.com");
 const contact3 = new Contact("Olek", "Fafi", "olekafi@gmail.com");
 const group1 = new GroupOfContacts("family");
 group1.addMember(contact1);
+group1.addMember(contact2);
 const adressBook1 = new AdressBook();
 adressBook1.addContact(contact1);
 adressBook1.addContact(contact2);
-adressBook1.createContact("Lexi", "Tobi", "tobimobi@wp.pl");
+adressBook1.createNewContact("Lexi", "Tobi", "tobimobi@wp.pl");
 adressBook1.addGroup(group1);
