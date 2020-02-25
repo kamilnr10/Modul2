@@ -101,24 +101,24 @@ class AdressBook {
     return `Group was deleted`;
   }
 
-  sortBy(property) {
+  sortBy(key) {
     const dynamicSort = () => {
       let sortOrder = 1;
 
-      if (property[0] === "-") {
+      if (key[0] === "-") {
         sortOrder = -1;
-        property = property.substr(1);
+        key = key.substr(1);
       }
 
       return (a, b) => {
         if (sortOrder == -1) {
-          return b[property].localeCompare(a[property]);
+          return b[key].localeCompare(a[key]);
         } else {
-          return a[property].localeCompare(b[property]);
+          return a[key].localeCompare(b[key]);
         }
       };
     };
-    this.contacts.sort(dynamicSort(property));
+    this.contacts.sort(dynamicSort(key));
     return `Contacts sorted by ${property}`;
   }
 }
