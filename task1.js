@@ -101,24 +101,32 @@ class AdressBook {
     return `Group was deleted`;
   }
 
+<<<<<<< HEAD
   sortBy(property) {
+=======
+  sortBy(key) {
+>>>>>>> de5da8824f9a2ccd5b4b63435ebb6893e29b655a
     const dynamicSort = () => {
       let sortOrder = 1;
 
-      if (property[0] === "-") {
+      if (key[0] === "-") {
         sortOrder = -1;
-        property = property.substr(1);
+        key = key.substr(1);
       }
 
       return (a, b) => {
         if (sortOrder == -1) {
-          return b[property].localeCompare(a[property]);
+          return b[key].localeCompare(a[key]);
         } else {
-          return a[property].localeCompare(b[property]);
+          return a[key].localeCompare(b[key]);
         }
       };
     };
+<<<<<<< HEAD
     this.contacts.sort(dynamicSort(property));
+=======
+    this.contacts.sort(dynamicSort(key));
+>>>>>>> de5da8824f9a2ccd5b4b63435ebb6893e29b655a
     return `Contacts sorted by ${property}`;
   }
 }
@@ -150,10 +158,17 @@ class Contact {
 }
 
 class GroupOfContacts {
+<<<<<<< HEAD
   constructor(name, ...contacts) {
     this.id = uuidv4().substr(3, 3);
     this.group = name;
     this.contacts = [...contacts];
+=======
+  constructor(name) {
+    this.id = uuidv4().substr(3, 3);
+    this.group = name;
+    this.contacts = [];
+>>>>>>> de5da8824f9a2ccd5b4b63435ebb6893e29b655a
   }
   addNewContact(newMember) {
     this.contacts.push(newMember);
@@ -162,12 +177,15 @@ class GroupOfContacts {
   deleteContactFromGroup(id) {
     this.contacts = this.contacts.filter(item => {
       return item.id !== id;
+<<<<<<< HEAD
     });
   }
 
   readContacts() {
     const listOfContacts = this.groups.map(item => {
       return `\n ID: ${item.id} Name: ${item.name} Surname:${item.surname} Email: ${item.email} Date: ${item.date} `;
+=======
+>>>>>>> de5da8824f9a2ccd5b4b63435ebb6893e29b655a
     });
     return `${listOfContacts}`;
   }
@@ -177,12 +195,41 @@ class GroupOfContacts {
     this.group = name;
     this.contacts = [...contacts];
   }
+
+  createContact(name, surname, email) {
+    const contact = {
+      id: uuidv4().substr(3, 3),
+      name: name,
+      surname: surname,
+      email: email,
+      date: new Date()
+    };
+    this.contacts.push(contact);
+  }
+
+  readContacts() {
+    const listOfContacts = this.groups.map(item => {
+      return `\n ID: ${item.id} Name: ${item.name} Surname:${item.surname} Email: ${item.email} Date: ${item.date} `;
+    });
+    return `${listOfContacts}`;
+  }
+
+  updateContact(id, name, surname, email) {
+    // console.log(this.contacts);
+    const contact = this.contacts.filter(contact => contact.id === id);
+    console.log(contact);
+    for (let person of contact)
+      return person.updateContact(name, surname, email);
+  }
 }
 
 const contact1 = new Contact("Kamil", "Nowak", "kamilnowak0@gmail.com");
 const contact2 = new Contact("Zlatan", "Alek", "zlatanalek@gmail.com");
 const contact3 = new Contact("Olek", "Fafi", "olekafi@gmail.com");
+<<<<<<< HEAD
 const contact4 = new Contact("Ala", "Kajafi", "makoi@gmail.com");
+=======
+>>>>>>> de5da8824f9a2ccd5b4b63435ebb6893e29b655a
 const group1 = new GroupOfContacts("family");
 const group2 = new GroupOfContacts("friends");
 group1.addNewContact(contact1);
