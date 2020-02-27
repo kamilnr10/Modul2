@@ -71,6 +71,16 @@ class AdressBook {
     return `${listOfContacts}`;
   }
 
+  updateContact(id, name, surname, email) {
+    const contact = this.contacts.filter(item => item.id === id);
+    console.log(contact);
+    for (let item of contact) {
+      console.log(item);
+      return item.updateContact(name, surname, email);
+    }
+    return `Contact was updated`;
+  }
+
   deleteContact(id) {
     this.contacts = this.contacts.filter(contact => contact.id !== id);
     // this.groups = this.groups.filter(group => {
@@ -122,10 +132,10 @@ class Contact {
     this.date = new Date();
   }
 
-  updateContact(newName, newSurname, newEmail) {
-    this.name = newName;
-    this.surname = newSurname;
-    this.email = newEmail;
+  updateContact(name, surname, email) {
+    this.name = name;
+    this.surname = surname;
+    this.email = email;
     this.date = new Date();
     return `Contact with ID: ${this.id} was updated`;
   }
@@ -140,10 +150,10 @@ class Contact {
 }
 
 class GroupOfContacts {
-  constructor(name) {
+  constructor(name, ...contacts) {
     this.id = uuidv4().substr(3, 3);
     this.group = name;
-    this.contacts = [];
+    this.contacts = [...contacts];
   }
   addNewContact(newMember) {
     this.contacts.push(newMember);
@@ -155,17 +165,6 @@ class GroupOfContacts {
     });
   }
 
-  createContact(name, surname, email) {
-    const contact = {
-      id: uuidv4().substr(3, 3),
-      name: name,
-      surname: surname,
-      email: email,
-      date: new Date()
-    };
-    this.contacts.push(contact);
-  }
-
   readContacts() {
     const listOfContacts = this.groups.map(item => {
       return `\n ID: ${item.id} Name: ${item.name} Surname:${item.surname} Email: ${item.email} Date: ${item.date} `;
@@ -173,18 +172,17 @@ class GroupOfContacts {
     return `${listOfContacts}`;
   }
 
-  updateContact(id, newName, newSurname, newEmail) {
+  updateGroup(name, ...contacts) {
     // console.log(this.contacts);
-    const contact = this.contacts.filter(contact => contact.id === id);
-    console.log(contact);
-    for (let person of contact)
-      return person.updateContact(newName, newSurname, newEmail);
+    this.group = name;
+    this.contacts = [...contacts];
   }
 }
 
 const contact1 = new Contact("Kamil", "Nowak", "kamilnowak0@gmail.com");
 const contact2 = new Contact("Zlatan", "Alek", "zlatanalek@gmail.com");
 const contact3 = new Contact("Olek", "Fafi", "olekafi@gmail.com");
+const contact4 = new Contact("Ala", "Kajafi", "makoi@gmail.com");
 const group1 = new GroupOfContacts("family");
 const group2 = new GroupOfContacts("friends");
 group1.addNewContact(contact1);
