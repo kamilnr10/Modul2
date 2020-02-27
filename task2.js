@@ -15,11 +15,24 @@ class Cart {
     this.name = name;
     this.cart = [];
   }
-  productList() {}
-  addProduct() {}
-  removeProduct() {}
+  productList() {
+    return this.cart.map(item => {
+      return `\n ID: ${item.id} name: ${item.name} price ${item.price} ${item.discount}`;
+    });
+  }
+  addProduct(product) {
+    this.cart.push(product);
+    return `Product ${product.name} was added to a Cart`;
+  }
+  removeProduct(id) {
+    const selectedProduct = this.cart.filter(product => product.id === id);
+    this.cart = this.cart.filter(product => product.id !== id);
+    return `Product: ${selectedProduct.map(
+      item => item.name
+    )} was deleted from Cart`;
+  }
   discountCart() {}
-  sumPrices() {}
+  sumPrices(productList) {}
   sumQuantity() {}
 }
 
@@ -32,6 +45,18 @@ class Product {
     this.id = uuidv4().substr(3, 3);
   }
 
-  read() {}
-  update() {}
+  read() {
+    return `Product ID: ${this.id} \n Name: ${this.name} \n Category: ${this.category} \n Price: ${this.price} \n Discount: ${this.discount}`;
+  }
+  update(price) {
+    this.price = price;
+    return `Price (${this.price}) of product ID: ${this.id} name: ${this.name} was update`;
+  }
 }
+
+const apple = new Product("apple", "food", 2, 0.1);
+const beer = new Product("beer", "food", 4, 0.1);
+const phone = new Product("iphone", "electronics", 25, 0.1);
+const cart1 = new Cart("Kaufland Cart");
+cart1.addProduct(apple);
+cart1.addProduct(phone);
