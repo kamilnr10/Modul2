@@ -16,9 +16,9 @@ class Cart {
     this.cart = [];
   }
   productList() {
-    return this.cart.map(item => {
-      return `\n ID: ${item.id} name: ${item.name} price ${item.price} ${item.discount}`;
-    });
+    for (let product of this.cart) {
+      console.log(product);
+    }
   }
   addProduct(product) {
     this.cart.push(product);
@@ -32,7 +32,13 @@ class Cart {
     )} was deleted from Cart`;
   }
   discountCart() {}
-  sumPrices(productList) {}
+  sumPrices() {
+    const calulateTotalProducts = this.cart.reduce(
+      (total, item) => (total += item.price),
+      0
+    );
+    return calulateTotalProducts;
+  }
   sumQuantity() {}
 }
 
