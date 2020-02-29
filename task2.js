@@ -15,15 +15,20 @@ class Cart {
     this.name = name;
     this.cart = [];
   }
+
   productList() {
-    for (let product of this.cart) {
-      console.log(product);
-    }
+    const list = this.cart.map(item => {
+      console.log(item);
+      return item;
+    });
+    return list;
   }
+
   addProduct(product) {
     this.cart.push(product);
     return `Product ${product.name} was added to a Cart`;
   }
+
   removeProduct(id) {
     const selectedProduct = this.cart.filter(product => product.id === id);
     this.cart = this.cart.filter(product => product.id !== id);
@@ -31,7 +36,18 @@ class Cart {
       item => item.name
     )} was deleted from Cart`;
   }
-  discountCart() {}
+
+  discountCart() {
+    let discount = 0.9;
+    const calculateDiscount = Math.round(this.sumPrices() * discount);
+    if (this.cart.length >= 2 && this.cart.length < 4) {
+      return `Qunatity of products is more then 2. Discount on the Cart is 10%. Sum of total products: ${calculateDiscount} `;
+    } else if (this.cart.length >= 4) {
+      discount = 0.75;
+      return `Qunatity of products is more then 4. Discount on the Cart is 25%. Sum of total products: ${calculateDiscount} `;
+    }
+  }
+
   sumPrices() {
     const calulateTotalProducts = this.cart.reduce(
       (total, item) => (total += item.price),
@@ -39,7 +55,11 @@ class Cart {
     );
     return calulateTotalProducts;
   }
-  sumQuantity() {}
+
+  sumQuantity() {
+    const quantity = this.cart.length;
+    return `Sum quantity in Cart: ${quantity}`;
+  }
 }
 
 class Product {
@@ -54,6 +74,7 @@ class Product {
   read() {
     return `Product ID: ${this.id} \n Name: ${this.name} \n Category: ${this.category} \n Price: ${this.price} \n Discount: ${this.discount}`;
   }
+
   update(price) {
     this.price = price;
     return `Price (${this.price}) of product ID: ${this.id} name: ${this.name} was update`;
@@ -61,8 +82,13 @@ class Product {
 }
 
 const apple = new Product("apple", "food", 2, 0.1);
+const apple1 = new Product("apple", "food", 2, 0.1);
 const beer = new Product("beer", "food", 4, 0.1);
 const phone = new Product("iphone", "electronics", 25, 0.1);
+const phone1 = new Product("iphone", "electronics", 25, 0.1);
 const cart1 = new Cart("Kaufland Cart");
 cart1.addProduct(apple);
+cart1.addProduct(apple1);
 cart1.addProduct(phone);
+cart1.addProduct(phone1);
+cart1.addProduct(beer);
