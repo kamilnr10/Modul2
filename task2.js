@@ -51,7 +51,7 @@ class Cart {
 
   sumPrices() {
     const calulateTotalProducts = this.cart.reduce(
-      (total, item) => (total += item.price),
+      (total, item) => (total += item.discountPrice),
       0
     );
     return calulateTotalProducts;
@@ -69,6 +69,7 @@ class Product {
     this.category = category;
     this.price = price;
     this.discount = discount;
+    this.discountPrice = this.price - (this.price * this.discount) / 100;
     this.id = uuidv4().substr(3, 3);
   }
 
@@ -82,11 +83,11 @@ class Product {
   }
 }
 
-const apple = new Product("apple", "food", 2, 0.1);
-const apple1 = new Product("apple", "food", 2, 0.1);
-const beer = new Product("beer", "food", 4, 0.1);
-const phone = new Product("iphone", "electronics", 25, 0.1);
-const phone1 = new Product("iphone", "electronics", 25, 0.1);
+const apple = new Product("apple", "food", 2, 5);
+const apple1 = new Product("apple", "food", 2, 5);
+const beer = new Product("beer", "food", 4, 5);
+const phone = new Product("iphone", "electronics", 25, 10);
+const phone1 = new Product("iphone", "electronics", 25, 10);
 const cart1 = new Cart("Kaufland Cart");
 cart1.addProduct(apple);
 cart1.addProduct(apple1);
