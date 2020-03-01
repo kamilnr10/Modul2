@@ -38,12 +38,13 @@ class Cart {
   }
 
   discountCart() {
-    let discount = 0.9;
-    const calculateDiscount = Math.round(this.sumPrices() * discount);
     if (this.cart.length >= 2 && this.cart.length < 4) {
+      let discount = 0.9;
+      const calculateDiscount = Math.round(this.sumPrices() * discount);
       return `Qunatity of products is more then 2. Discount on the Cart is 10%. Sum of total products: ${calculateDiscount} `;
     } else if (this.cart.length >= 4) {
-      discount = 0.75;
+      let discount = 0.75;
+      const calculateDiscount = Math.round(this.sumPrices() * discount);
       return `Qunatity of products is more then 4. Discount on the Cart is 25%. Sum of total products: ${calculateDiscount} `;
     }
   }
