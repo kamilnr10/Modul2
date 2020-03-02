@@ -51,7 +51,7 @@ class Cart {
 
   sumPrices() {
     const calulateTotalProducts = this.cart.reduce(
-      (total, item) => (total += item.discountPrice),
+      (total, item) => Math.floor((total += item.discountPrice)),
       0
     );
     return calulateTotalProducts;
