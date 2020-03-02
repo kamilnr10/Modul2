@@ -63,8 +63,6 @@ class Cart {
       0
     );
     return calulateTotalQuantity;
-    // const quantity = this.cart.length;
-    // return `Sum quantity in Cart: ${quantity}`;
   }
 }
 
@@ -76,7 +74,6 @@ class Product {
     this.quantity = quantity;
     this.price = price;
     this.discount = "";
-    // this.discountPrice = this.price - (this.price * this.discount) / 100;
   }
 
   read() {
@@ -111,3 +108,4 @@ cart1.addProduct(apple1);
 cart1.addProduct(phone);
 cart1.addProduct(phone1);
 cart1.addProduct(beer);
+phone1.addDiscount(20);
