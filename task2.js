@@ -14,6 +14,8 @@ class Cart {
   constructor() {
     this.id = uuidv4().substr(3, 3);
     this.cart = [];
+    this.sum = { price: "", quantity: "" };
+    this.discountCodes = ["weekend5", "weekend10", "weekend15"];
   }
 
   productList() {
@@ -37,15 +39,30 @@ class Cart {
     )} was deleted from Cart`;
   }
 
-  discountCart() {
-    if (this.cart.length >= 2 && this.cart.length < 4) {
-      let discount = 0.9;
-      const calculateDiscount = Math.round(this.sumPrices() * discount);
-      return `Qunatity of products is more then 2. Discount on the Cart is 10%. Sum of total products: ${calculateDiscount} `;
-    } else if (this.cart.length >= 4) {
-      let discount = 0.75;
-      const calculateDiscount = Math.round(this.sumPrices() * discount);
-      return `Qunatity of products is more then 4. Discount on the Cart is 25%. Sum of total products: ${calculateDiscount} `;
+  discountCart(discountCode) {
+    let discount = 5;
+    if (this.discountCodes.includes(discountCode)) {
+      if (discountCode === this.discountCodes[0]) {
+        this.sum.price = this.sum.price - (this.sum.price * discount) / 100;
+        this.discountCodes = this.discountCodes.filter(
+          item => item !== discountCode
+        );
+        return `You have just used a discount code for 5%`;
+      } else if (discountCode === this.discountCodes[1]) {
+        discount += discount;
+        this.sum.price = this.sum.price - (this.sum.price * discount) / 100;
+        this.discountCodes = this.discountCodes.filter(
+          item => item !== discountCode
+        );
+        return `You have just used a discount code for 10%`;
+      } else if (discountCode === this.discountCodes[2]) {
+        discount += discount;
+        this.sum.price = this.sum.price - (this.sum.price * discount) / 100;
+        this.discountCodes = this.discountCodes.filter(
+          item => item !== discountCode
+        );
+        return `You have just used a discount code for 15%`;
+      }
     }
   }
 
@@ -54,6 +71,7 @@ class Cart {
       (total, item) => Math.floor((total += item.price * item.quantity)),
       0
     );
+    this.sum.price = calulateTotalProducts;
     return calulateTotalProducts;
   }
 
@@ -62,6 +80,7 @@ class Cart {
       (total, item) => Math.floor((total += item.quantity)),
       0
     );
+    this.sum.quantity = calulateTotalQuantity;
     return calulateTotalQuantity;
   }
 }
