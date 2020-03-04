@@ -15,7 +15,7 @@ class Cart {
     this.id = uuidv4().substr(3, 3);
     this.cart = [];
     this.sum = { price: "", quantity: "" };
-    this.discountCodes = ["weekend5", "weekend10", "weekend15"];
+    this.discountCodes = ["weekend-5", "weekend-10", "weekend-15"];
   }
 
   productList() {
@@ -44,29 +44,15 @@ class Cart {
   }
 
   discountCart(discountCode) {
-    let discount = 5;
     if (this.discountCodes.includes(discountCode)) {
-      if (discountCode === this.discountCodes[0]) {
-        this.sum.price = this.sum.price - (this.sum.price * discount) / 100;
-        this.discountCodes = this.discountCodes.filter(
-          item => item !== discountCode
-        );
-        return `You have just used a discount code for 5%`;
-      } else if (discountCode === this.discountCodes[1]) {
-        discount += discount;
-        this.sum.price = this.sum.price - (this.sum.price * discount) / 100;
-        this.discountCodes = this.discountCodes.filter(
-          item => item !== discountCode
-        );
-        return `You have just used a discount code for 10%`;
-      } else if (discountCode === this.discountCodes[2]) {
-        discount += discount;
-        this.sum.price = this.sum.price - (this.sum.price * discount) / 100;
-        this.discountCodes = this.discountCodes.filter(
-          item => item !== discountCode
-        );
-        return `You have just used a discount code for 15%`;
-      }
+      const discount = parseInt(discountCode.replace(/[^0-9]/g, ""));
+      console.log(discount);
+      this.sum.price = this.sum.price - (this.sum.price * discount) / 100;
+      console.log(this.sum.price);
+      this.discountCodes = this.discountCodes.filter(
+        item => item !== discountCode
+      );
+      return `You have just used a discount code for ${discount}%`;
     }
   }
 
