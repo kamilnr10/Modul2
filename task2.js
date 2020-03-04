@@ -28,12 +28,16 @@ class Cart {
 
   addProduct(product) {
     this.cart.push(product);
+    this.sumPrices();
+    this.sumQuantity();
     return `Product ${product.name} was added to a Cart`;
   }
 
   removeProduct(id) {
     const selectedProduct = this.cart.filter(product => product.id === id);
     this.cart = this.cart.filter(product => product.id !== id);
+    this.sumPrices();
+    this.sumQuantity();
     return `Product: ${selectedProduct.map(
       item => item.name
     )} was deleted from Cart`;
@@ -99,7 +103,12 @@ class Product {
     return `Product ID: ${this.id} \n Name: ${this.name} \n Category: ${this.category} \n Price: ${this.price} \n Discount: ${this.discount}`;
   }
 
-  update(name, category, quantity, price) {
+  update(
+    name = this.name,
+    category = this.category,
+    quantity = this.quantity,
+    price = this.price
+  ) {
     this.name = name;
     this.category = category;
     this.quantity = quantity;
