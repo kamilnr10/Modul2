@@ -89,19 +89,6 @@ class Product {
     return `Product ID: ${this.id} \n Name: ${this.name} \n Category: ${this.category} \n Price: ${this.price} \n Discount: ${this.discount}`;
   }
 
-  // update(
-  //   name = this.name,
-  //   category = this.category,
-  //   quantity = this.quantity,
-  //   price = this.price
-  // ) {
-  //   this.name = name;
-  //   this.category = category;
-  //   this.quantity = quantity;
-  //   this.price = price;
-  //   return `Updated product: \n ID: ${this.id} name: ${name} category: ${category} quantity: ${quantity} price: ${price}`;
-  // }
-
   update(key, value) {
     console.log(Object.keys(this));
     if (Object.keys(this).includes(key)) {
