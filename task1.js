@@ -37,12 +37,12 @@ class AdressBook {
 
   addContact(contact) {
     this.contacts.push(contact);
-    return this.contacts;
+    return `Contact was added`;
   }
 
   addGroup(group) {
     this.groups.push(group);
-    return this.groups;
+    return `Group was added`;
   }
 
   createNewContact(name, surname, email) {
@@ -71,34 +71,41 @@ class AdressBook {
     return `${listOfContacts}`;
   }
 
-  updateContact(id, name, surname, email) {
-    const contact = this.contacts.filter(item => item.id === id);
-    console.log(contact);
-    for (let item of contact) {
-      console.log(item);
-      return item.updateContact(name, surname, email);
-    }
-    return `Contact was updated`;
-  }
-
-  deleteContact(id) {
-    this.contacts = this.contacts.filter(contact => contact.id !== id);
-    // this.groups = this.groups.filter(group => {
-    //   group.deleteContactFromGroup(id);
-    // });
-    this.groups = this.groups.map(group =>
-      group.contacts.filter(contact => {
-        contact.id !== id;
-      })
-    );
-    return `Contact was deleted`;
-  }
-
-  deleteGroup(id) {
-    this.groups = this.groups.filter(group => {
-      return group.id !== id;
+  updateContact(contact, name, surname, email) {
+    this.contacts = this.contacts.map(item => {
+      if (item.id === contact.id) {
+        item.updateContact(name, surname, email);
+      }
+      return item;
     });
-    return `Group was deleted`;
+    this.groups = this.groups.map(group => {
+      if (group.hasContact(contact)) {
+        return group.contacts.map(item => {
+          if (item.id === contact.id) {
+            item.updateContact(name, surname, email);
+          }
+          return item;
+        });
+      }
+    });
+    return `Contact has been updated`;
+  }
+
+  deleteContact(contact) {
+    this.contacts = this.contacts.filter(item => item.id !== contact.id);
+    this.groups = this.groups.map(group => {
+      if (group.hasContact(contact)) {
+        return group.contacts.filter(item => item.id !== id);
+      }
+    });
+    return `Contact has been deleted`;
+  }
+
+  deleteGroup(group) {
+    this.groups = this.groups.filter(item => {
+      return item.id !== group.id;
+    });
+    return `Group has been deleted`;
   }
 
   sortBy(key) {
@@ -132,55 +139,46 @@ class Contact {
     this.date = new Date();
   }
 
-  updateContact(name, surname, email) {
-    this.name = name;
-    this.surname = surname;
-    this.email = email;
-    this.date = new Date();
-    return `Contact with ID: ${this.id} was updated`;
+  updateContact(key, value) {
+    if (Object.keys(this).includes(key)) {
+      this[key] = value;
+      this.date = new Date();
+    }
+    return `Contact has been updated`;
   }
 
   readContact() {
-    return JSON.stringify(
-      `Contact ID: ${this.id} name: ${this.name} surname: ${
-        this.surname
-      }  email: ${this.email} date: ${this.date.toLocaleString()}`
-    );
+    return `Contact ID: ${this.id} name: ${this.name} surname: ${
+      this.surname
+    }  email: ${this.email} date: ${this.date.toLocaleString()}`;
   }
 }
 
 class GroupOfContacts {
-  constructor(name) {
+  constructor(name, ...contacts) {
     this.id = uuidv4().substr(3, 3);
-    this.group = name;
-    this.contacts = [];
-  }
-  addNewContact(newMember) {
-    this.contacts.push(newMember);
-  }
-
-  deleteContactFromGroup(id) {
-    this.contacts = this.contacts.filter(item => {
-      return item.id !== id;
-    });
-    return `${listOfContacts}`;
-  }
-
-  updateGroup(name, ...contacts) {
-    // console.log(this.contacts);
     this.group = name;
     this.contacts = [...contacts];
   }
 
-  createContact(name, surname, email) {
-    const contact = {
-      id: uuidv4().substr(3, 3),
-      name: name,
-      surname: surname,
-      email: email,
-      date: new Date()
-    };
+  addNewContact(contact) {
     this.contacts.push(contact);
+  }
+
+  hasContact(contact) {
+    const findContact = this.contacts.filter(item => {
+      return item.id === contact.id;
+    });
+    if (findContact.length > 0) {
+      return true;
+    } else return false;
+  }
+
+  deleteContactFromGroup(contact) {
+    if (this.hasContact(contact)) {
+      this.contacts = this.contacts.filter(item => item.id !== contact.id);
+      return `Contact has been deleted`;
+    }
   }
 
   readContacts() {
@@ -190,12 +188,11 @@ class GroupOfContacts {
     return `${listOfContacts}`;
   }
 
-  updateContact(id, name, surname, email) {
+  updateGroup(name, ...contacts) {
     // console.log(this.contacts);
-    const contact = this.contacts.filter(contact => contact.id === id);
-    console.log(contact);
-    for (let person of contact)
-      return person.updateContact(name, surname, email);
+    this.group = name;
+    this.contacts = [...contacts];
+    return `Group has been updated`;
   }
 }
 
