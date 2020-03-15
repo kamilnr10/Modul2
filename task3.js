@@ -75,7 +75,6 @@ const user1 = new User(
 
 class Admin extends User {
   constructor(...params) {
-    // super(name, surname, birth, gender, email, password);
     super(...params);
     this.id = uuidv4().substr(3, 3);
     this.accesLevel = "admin";
