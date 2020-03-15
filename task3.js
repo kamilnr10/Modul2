@@ -45,8 +45,7 @@ class User {
     if (Object.keys(this).includes(key)) {
       if (key === "" || value === "") {
         return `This field is required (You can't leave this field blank).`;
-      }
-      if (key === "email" && is.not.email(value)) {
+      } else if (key === "email" && is.not.email(value)) {
         return `Please enter a valid email address (the data you entered is not in the right format). `;
       } else if (key === "permission") {
         return `Permission denied. Can't change permission level`;
