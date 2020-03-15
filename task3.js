@@ -13,24 +13,9 @@
 class User {
   constructor(name, surname, birthDate, gender, email, password) {
     const passwordValidation =
-      value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/g) === null;
-    if (name === "" || surname === "") {
-      throw Error(`Name and surname are required (You can't leave this blank)`);
-    } else if (birthDate === "") {
-      throw Error(
-        "Birth date is required (You can't leave this blank). Birth date format DD/MM/YYYY"
-      );
-    } else if (this.gender === undefined || this.gender === "") {
-      throw Error("Gender is required. You must select male or female");
-    } else if (is.not.email(email)) {
-      throw Error(
-        `Please enter a valid email address (the data you entered is not in the right format). `
-      );
-    } else if (passwordValidation) {
-      throw Error(
-        `Your password needs to be between 8 characters long and contain one uppercase letter one number. (A very specific data format is required for your data).`
-      );
-    }
+      password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/g) ===
+      null;
+
     this.id = uuidv4().substr(3, 3);
     this.name = name;
     this.surname = surname;
@@ -39,6 +24,28 @@ class User {
     this.email = email;
     this.password = password;
     this.permission = "user";
+
+    if (name === "" || surname === "") {
+      throw Error(`Name and surname are required (You can't leave this blank)`);
+    }
+    if (birthDate === "") {
+      throw Error(
+        "Birth date is required (You can't leave this blank). Birth date format DD/MM/YYYY"
+      );
+    }
+    if (this.gender === undefined || this.gender === "") {
+      throw Error("Gender is required. You must select male or female");
+    }
+    if (is.not.email(email)) {
+      throw Error(
+        `Please enter a valid email address (the data you entered is not in the right format). `
+      );
+    }
+    if (passwordValidation) {
+      throw Error(
+        `Your password needs to be between 8 characters long and contain one uppercase letter one number. (A very specific data format is required for your data).`
+      );
+    }
   }
 
   update(key, value) {
@@ -71,8 +78,7 @@ const user1 = new User(
   "1/1/1954",
   "male",
   "kamil@gmail.com",
-  "qwerty",
-  "user"
+  "qW1ertyu"
 );
 
 class Admin extends User {
@@ -94,9 +100,9 @@ class Admin extends User {
 const admin1 = new Admin(
   "admin",
   "deep",
-  "1986",
+  "3/12/1986",
   "male",
   "admin@gmail.com",
-  "qwerty123",
+  "Qwerty1q",
   "admin"
 );
