@@ -17,7 +17,9 @@ class User {
     if (name === "" || surname === "") {
       throw Error(`Name and surname are required (You can't leave this blank)`);
     } else if (birthDate === "") {
-      throw Error("Birth date is required (You can't leave this blank)");
+      throw Error(
+        "Birth date is required (You can't leave this blank). Birth date format DD/MM/YYYY"
+      );
     } else if (this.gender === undefined || this.gender === "") {
       throw Error("Gender is required. You must select male or female");
     } else if (is.not.email(email)) {
