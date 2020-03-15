@@ -1,0 +1,22 @@
+{
+  "name": "mudul_2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamilnr10/Modul2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kamilnr10/Modul2/issues"
+  },
+  "homepage": "https://github.com/kamilnr10/Modul2#readme",
+  "dependencies": {
+    "is_js": "^0.9.0"
+  }
+}
