@@ -77,14 +77,14 @@ class Admin extends User {
   constructor(...params) {
     super(...params);
     this.id = uuidv4().substr(3, 3);
-    this.accesLevel = "admin";
+    this.permission = "admin";
   }
   updatePassword(user, newPassword) {
     user.password = newPassword;
     return `User password has been updated`;
   }
   changeAcces(user) {
-    user.accesLevel = "admin";
+    user.permission = "admin";
     return `User acces level has been updated to Admin`;
   }
 }
