@@ -101,13 +101,16 @@ const library = new Library(
 // każdy dzień zwłoki to naliczenie jakiejś kary. Przy zwrocie książka wraca na liste.
 
 class Rent {
-  constructor(book) {
-    this.rentBook(book);
+  constructor(library, book) {
+    this.rentBook(library, book);
     this.penalty = 0;
   }
 
-  rentBook(book) {
-    library.listOfRentedBooks.push(book);
+  rentBook(library, book) {
+    if (library.listOfBooks.filter(item => item.id === book.id)) {
+      library.listOfBooks.filter(item => item !== book);
+      library.listOfRentedBooks.push(book);
+    }
   }
   returnBook(book) {}
 
