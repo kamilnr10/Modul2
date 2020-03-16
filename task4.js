@@ -102,11 +102,7 @@ const library = new Library(
 
 class Rent {
   constructor(book) {
-    this.name = book;
-    this.dateOfRent = moment().format("l");
-    this.dateOfReturn = moment()
-      .add(7, "days")
-      .calendar();
+    this.rentBook(book);
     this.penalty = 0;
   }
 
@@ -115,5 +111,5 @@ class Rent {
   }
   returnBook(book) {}
 
-  payPenalty(penalty) {}
+  payPenalty() {}
 }
