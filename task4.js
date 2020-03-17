@@ -47,15 +47,18 @@ const book10 = new Book("Cień wiatru", "Carlos Ruiz Zafon");
 // Ma umożliwiać: dodawanie książek do listy, usuwanie książek z listy
 
 class Library {
-  constructor(name, ...listOfBooks) {
+  constructor(name) {
     this.name = name;
-    this.listOfBooks = [...listOfBooks];
+    this.listOfBooks = [];
     this.listOfRentedBooks = [];
+    if (name === "") {
+      throw Error(`Name are required (You can't leave this blank)`);
+    }
   }
 
-  addBookToLibrary(book) {
-    this.listOfBooks.push(book);
-    return `Book has been added to Library`;
+  addBooksToLibrary(...book) {
+    this.listOfBooks.push(...book);
+    return `Book/s has been added to Library`;
   }
 
   deleteBookFromLibrary(book) {
@@ -66,20 +69,29 @@ class Library {
 
   showAllBooks() {
     const allBooksInLibrary = this.listOfBooks.concat(this.listOfRentedBooks);
-    return allBooksInLibrary;
+    const listOfBooks = allBooksInLibrary.map(item => {
+      return `\n ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
+    });
+    return `${listOfBooks}`;
   }
 
   showAvailableBooks() {
-    return this.listOfBooks;
+    const listOfBooks = this.listOfBooks.map(item => {
+      return `\n ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
+    });
+    return `${listOfBooks}`;
   }
 
   showRentedBooks() {
-    return this.listOfRentedBooks;
+    const listOfRentedBooks = this.listOfRentedBooks.map(item => {
+      return `\n ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
+    });
+    return `${listOfRentedBooks}`;
   }
 }
 
-const library = new Library(
-  "Town Library",
+const library = new Library("Town Library");
+library.addBooksToLibrary(
   book1,
   book2,
   book3,
@@ -107,12 +119,43 @@ class Rent {
   }
 
   rentBook(library, book) {
-    if (library.listOfBooks.filter(item => item.id === book.id)) {
-      library.listOfBooks.filter(item => item !== book);
+    if (library.listOfBooks.filter(item => item === book)) {
+      library.listOfBooks = library.listOfBooks.filter(item => item !== book);
       library.listOfRentedBooks.push(book);
-    }
+      this.id = book.id;
+      this.title = book.title;
+      this.author = book.author;
+      this.dateOfRent = moment()._d;
+      this.dateOfReturn = moment().add(7, "days")._d;
+      return `Book ${this.title} has been rented`;
+    } else return `We could not find book ${this.title} in the Library`;
   }
-  returnBook(book) {}
-
-  payPenalty() {}
+  returnBook(library, book) {
+    library.listOfBooks.push(book);
+    library.listOfRentedBooks = library.listOfRentedBooks.filter(
+      item => item !== book
+    );
+    const dateOfReturned = moment().add(7, "days")._d;
+    const dateOfReturn = this.dateOfReturn;
+    if (dateOfReturned > dateOfReturn) {
+      const penaltyPerDay = 10;
+      const differenceInTime =
+        dateOfReturned.getTime() - this.dateOfRent.getTime();
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+      this.penalty = Math.floor(differenceInDays * penaltyPerDay);
+      return `The book ${this.title} has returned too late. Penalty for delay is ${this.penalty}$`;
+    } else return `The book has returned in time`;
+  }
 }
+
+class Customer {
+  constructor(name, surname) {
+    this.name = name;
+    this.surname = surname;
+    this.id = uuidv4().substr(3, 3);
+    this.rentedBooks = [];
+  }
+}
+
+const rent1 = new Rent(library, book1);
+rent1.rentBook(library, book2);
