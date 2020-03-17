@@ -130,21 +130,30 @@ class Rent {
       return `Book ${this.title} has been rented`;
     } else return `We could not find book ${this.title} in the Library`;
   }
+
   returnBook(library, book) {
     library.listOfBooks.push(book);
     library.listOfRentedBooks = library.listOfRentedBooks.filter(
       item => item !== book
     );
-    const dateOfReturned = moment().add(7, "days")._d;
-    const dateOfReturn = this.dateOfReturn;
-    if (dateOfReturned > dateOfReturn) {
+    const dateOfReturnedBook = moment().add(7, "days")._d;
+    const dateOfReturnBook = this.dateOfReturn;
+    if (dateOfReturnedBook > dateOfReturnBook) {
       const penaltyPerDay = 10;
       const differenceInTime =
-        dateOfReturned.getTime() - this.dateOfRent.getTime();
+        dateOfReturnedBook.getTime() - this.dateOfRent.getTime();
       const differenceInDays = differenceInTime / (1000 * 3600 * 24);
       this.penalty = Math.floor(differenceInDays * penaltyPerDay);
       return `The book ${this.title} has returned too late. Penalty for delay is ${this.penalty}$`;
     } else return `The book has returned in time`;
+  }
+
+  payPenalty(customer) {
+    if (this.penalty < customer.wallet || this.penalty === customer.wallet) {
+      customer.wallet = customer.wallet - this.penalty;
+      this.penalty = 0;
+      return `Penalty has been paid`;
+    } else return `You can't afford it. You must go to jail`;
   }
 }
 
@@ -153,9 +162,11 @@ class Customer {
     this.name = name;
     this.surname = surname;
     this.id = uuidv4().substr(3, 3);
-    this.rentedBooks = [];
+    this.wallet = 100;
   }
 }
 
 const rent1 = new Rent(library, book1);
 rent1.rentBook(library, book2);
+
+const customer = new Customer("Kamil", "Jones");
