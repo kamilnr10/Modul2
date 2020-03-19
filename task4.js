@@ -51,6 +51,16 @@ class Book {
   }
 }
 
+class RentableBook extends Book {
+  constructor(...params) {
+    super(...params);
+    this.isRentable = false;
+  }
+  rentBook(book) {
+    this.isRentable = true;
+  }
+}
+
 const book1 = new Book("Mechaniczna ksiezniczka", "CassandraClare");
 const book2 = new Book("Miecz przeznaczenia", "Andrzej Sapkowski");
 const book3 = new Book("Mechaniczkny ksiąze", "Cassandra Clare");
@@ -75,7 +85,7 @@ class Rent {
   }
 
   rentBook(library, book) {
-    if (library.hasBook(book)) {
+    if (library.isBookInLibrary(book)) {
       library.listOfBooks = library.listOfBooks.filter(item => item !== book);
       library.listOfRentedBooks.push(book);
       this.dateOfRent = moment().format();
@@ -117,20 +127,29 @@ class Library {
   }
 
   deleteBookFromLibrary(book) {
-    this.listOfBooks = this.listOfBooks.filter(item => item !== book);
-    return `Book: ${book.title} has been deleted from Library`;
+    if (this.isBookInLibrary(book)) {
+      this.listOfBooks = this.listOfBooks.filter(item => item !== book);
+      return `Book: ${book.title} has been deleted from Library`;
+    } else if (this.isBookRented(book)) {
+      this.listOfRentedBooks = this.listOfRentedBooks.filter(
+        item => item !== book
+      );
+      return `Book: ${book.title} has been deleted from Library`;
+    } else {
+      throw Error("Book wasn't find in library");
+    }
   }
 
   showAllBooks() {
     const allBooksInLibrary = this.listOfBooks.concat(this.listOfRentedBooks);
-
     const searchForRentedBooks = allBooksInLibrary.some(
       v => this.listOfRentedBooks.indexOf(v) !== -1
     );
-    console.log(searchForRentedBooks);
-
     const listOfBooks = allBooksInLibrary.map(item => {
-      return `\n ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
+      if (item === this.listOfRentedBooks[0]) {
+        return `\n RENTED -- ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
+      } else
+        return `\n ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
     });
     return `${listOfBooks}`;
   }
@@ -149,8 +168,17 @@ class Library {
     return `${listOfRentedBooks}`;
   }
 
-  hasBook(book) {
+  isBookInLibrary(book) {
     const findBook = this.listOfBooks.filter(item => {
+      return item.id === book.id;
+    });
+    if (findBook.length > 0) {
+      return true;
+    } else return false;
+  }
+
+  isBookRented(book) {
+    const findBook = this.listOfRentedBooks.filter(item => {
       return item.id === book.id;
     });
     if (findBook.length > 0) {
