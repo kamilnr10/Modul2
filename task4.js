@@ -55,9 +55,19 @@ class RentableBook extends Book {
   constructor(...params) {
     super(...params);
     this.isRentable = false;
+    this.ratings = [];
   }
-  rentBook(book) {
-    this.isRentable = true;
+  toggleRentableStatus() {
+    this.isRentable = !this.isRentable;
+  }
+  getAvarageRating() {
+    let ratingsSum = this.ratings.reduce(
+      (accumulator, rating) => accumulator + rating
+    );
+    return ratingsSum / this.ratings.length;
+  }
+  addRating(value) {
+    this.ratings.push(value);
   }
 }
 
