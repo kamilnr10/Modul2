@@ -41,7 +41,7 @@ class Book {
 
   update(key, value) {
     if (Object.keys(this).includes(key)) {
-      if (key === id) {
+      if (key === "id") {
         return `Cannot change ID of book`;
       } else {
         this[key] = value;
