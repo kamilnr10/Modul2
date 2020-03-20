@@ -76,7 +76,7 @@ class RentableBook extends Book {
       const rating = ratingsSum / this.ratings.length;
       this.avarageRating = Math.floor(rating);
       return `Avarage rating of this book is : ${this.avarageRating}`;
-    } else throw Error("The book has no ratings");
+    } else throw Error("Book has no ratings");
   }
 
   rentBook() {
@@ -98,8 +98,8 @@ class RentableBook extends Book {
     if (rentDelayInDays > 0) {
       const penaltyPerDay = 10;
       this.penalty = rentDelayInDays * penaltyPerDay;
-      return `The book ${this.title} has returned too late. Penalty for delay is ${this.penalty}$`;
-    } else return `The book has returned in time`;
+      return `Book ${this.title} has returned too late. Penalty for delay is ${this.penalty}$`;
+    } else return `Book has returned in time`;
   }
 }
 
