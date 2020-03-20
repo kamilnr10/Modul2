@@ -54,63 +54,44 @@ class Book {
 class RentableBook extends Book {
   constructor(...params) {
     super(...params);
-    this.isRentable = false;
+    this.dateOfRent = "";
+    this.dateOfReturn = "";
+    this.isRentable = true;
+    this.avarageRating = 0;
     this.ratings = [];
   }
+
   toggleRentableStatus() {
     this.isRentable = !this.isRentable;
   }
-  getAvarageRating() {
-    let ratingsSum = this.ratings.reduce(
-      (accumulator, rating) => accumulator + rating
-    );
-    return ratingsSum / this.ratings.length;
-  }
+
   addRating(value) {
     this.ratings.push(value);
+    return `Book has been rated on ${value}`;
   }
-}
 
-const book1 = new Book("Mechaniczna ksiezniczka", "CassandraClare");
-const book2 = new Book("Miecz przeznaczenia", "Andrzej Sapkowski");
-const book3 = new Book("Mechaniczkny ksiąze", "Cassandra Clare");
-const book4 = new Book("Mistrz i Małgorzata", "Michaił Bułhakow");
-const book5 = new Book("Starcie Królów", "George R. R. Martin");
-const book6 = new Book("Ostatnie zyczenie", "Andrzej Sapkowski");
-const book7 = new Book("Zanim się pojawiłeś", "Jojo Moyes");
-const book8 = new Book("Mechaniczny Anioł", "Cassandra Clare");
-const book9 = new Book("Zieleń Szmaragdu", "Kerstin Gier");
-const book10 = new Book("Cień wiatru", "Carlos Ruiz Zafon");
+  getAvarageRating() {
+    if (this.ratings.length > 0) {
+      let ratingsSum = this.ratings.reduce((accum, rating) => accum + rating);
+      const rating = ratingsSum / this.ratings.length;
+      this.avarageRating = Math.floor(rating);
+      return `Avarage rating of this book is : ${this.avarageRating}`;
+    } else throw Error("The book has no ratings");
+  }
 
-class Rent {
-  constructor(library, book) {
-    this.id = book.id;
-    this.title = book.title;
-    this.author = book.author;
+  rentBook() {
+    this.isRentable = this.toggleRentableStatus();
+    this.dateOfRent = moment().format();
+    this.dateOfReturn = moment()
+      .add(7, "days")
+      .format();
+    return `Book ${this.title} has been rented`;
+  }
+
+  returnBook() {
+    this.isRentable = this.toggleRentableStatus();
     this.dateOfRent = "";
     this.dateOfReturn = "";
-    this.library = library.name;
-    this.penalty = 0;
-    this.rentBook(library, book);
-  }
-
-  rentBook(library, book) {
-    if (library.isBookInLibrary(book)) {
-      library.listOfBooks = library.listOfBooks.filter(item => item !== book);
-      library.listOfRentedBooks.push(book);
-      this.dateOfRent = moment().format();
-      this.dateOfReturn = moment()
-        .add(7, "days")
-        .format();
-      return `Book ${this.title} has been rented`;
-    } else return `We could not find book ${this.title} in the Library`;
-  }
-
-  returnBook(library, book) {
-    library.listOfBooks.push(book);
-    library.listOfRentedBooks = library.listOfRentedBooks.filter(
-      item => item !== book
-    );
     const dateOfReturnedBook = moment().add(14, "days");
     const dateOfReturnBook = moment(this.dateOfReturn);
     const rentDelayInDays = dateOfReturnedBook.diff(dateOfReturnBook, "days");
@@ -121,6 +102,58 @@ class Rent {
     } else return `The book has returned in time`;
   }
 }
+
+const book1 = new RentableBook("Mechaniczna ksiezniczka", "CassandraClare");
+const book2 = new RentableBook("Miecz przeznaczenia", "Andrzej Sapkowski");
+const book3 = new RentableBook("Mechaniczkny ksiąze", "Cassandra Clare");
+const book4 = new RentableBook("Mistrz i Małgorzata", "Michaił Bułhakow");
+const book5 = new RentableBook("Starcie Królów", "George R. R. Martin");
+const book6 = new RentableBook("Ostatnie zyczenie", "Andrzej Sapkowski");
+const book7 = new RentableBook("Zanim się pojawiłeś", "Jojo Moyes");
+const book8 = new RentableBook("Mechaniczny Anioł", "Cassandra Clare");
+const book9 = new RentableBook("Zieleń Szmaragdu", "Kerstin Gier");
+const book10 = new RentableBook("Cień wiatru", "Carlos Ruiz Zafon");
+
+// class Rent {
+//   constructor(library, book) {
+//     this.id = book.id;
+//     this.title = book.title;
+//     this.author = book.author;
+//     this.dateOfRent = "";
+//     this.dateOfReturn = "";
+//     this.library = library.name;
+//     this.penalty = 0;
+//     this.rentBook(library, book);
+//   }
+
+//   rentBook(library, book) {
+//     if (library.isBookInLibrary(book)) {
+//       this.isRentable = false;
+//       library.listOfBooks = library.listOfBooks.filter(item => item !== book);
+//       library.listOfRentedBooks.push(book);
+//       this.dateOfRent = moment().format();
+//       this.dateOfReturn = moment()
+//         .add(7, "days")
+//         .format();
+//       return `Book ${this.title} has been rented`;
+//     } else return `We could not find book ${this.title} in the Library`;
+//   }
+
+//   returnBook(library, book) {
+//     library.listOfBooks.push(book);
+//     library.listOfRentedBooks = library.listOfRentedBooks.filter(
+//       item => item !== book
+//     );
+//     const dateOfReturnedBook = moment().add(14, "days");
+//     const dateOfReturnBook = moment(this.dateOfReturn);
+//     const rentDelayInDays = dateOfReturnedBook.diff(dateOfReturnBook, "days");
+//     if (rentDelayInDays > 0) {
+//       const penaltyPerDay = 10;
+//       this.penalty = rentDelayInDays * penaltyPerDay;
+//       return `The book ${this.title} has returned too late. Penalty for delay is ${this.penalty}$`;
+//     } else return `The book has returned in time`;
+//   }
+// }
 
 class Library {
   constructor(name) {
@@ -145,18 +178,13 @@ class Library {
         item => item !== book
       );
       return `Book: ${book.title} has been deleted from Library`;
-    } else {
-      throw Error("Book wasn't find in library");
-    }
+    } else return "Book wasn't find in library";
   }
 
   showAllBooks() {
     const allBooksInLibrary = this.listOfBooks.concat(this.listOfRentedBooks);
-    const searchForRentedBooks = allBooksInLibrary.some(
-      v => this.listOfRentedBooks.indexOf(v) !== -1
-    );
     const listOfBooks = allBooksInLibrary.map(item => {
-      if (item === this.listOfRentedBooks[0]) {
+      if (item.isRentable === false) {
         return `\n RENTED -- ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
       } else
         return `\n ID: ${item.id}   Name: ${item.title}   Author:${item.author} `;
@@ -180,18 +208,18 @@ class Library {
 
   isBookInLibrary(book) {
     const findBook = this.listOfBooks.filter(item => {
-      return item.id === book.id;
-    });
-    if (findBook.length > 0) {
+      return item === book;
+    })[0];
+    if (findBook) {
       return true;
     } else return false;
   }
 
   isBookRented(book) {
     const findBook = this.listOfRentedBooks.filter(item => {
-      return item.id === book.id;
-    });
-    if (findBook.length > 0) {
+      return item === book;
+    })[0];
+    if (findBook.isRentable == false) {
       return true;
     } else return false;
   }
@@ -218,6 +246,3 @@ library.addBooksToLibrary(
   book9,
   book10
 );
-
-const rent1 = new Rent(library, book1);
-rent1.rentBook(library, book2);
