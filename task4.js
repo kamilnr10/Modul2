@@ -80,8 +80,6 @@ class RentableBook extends Book {
   }
 
   rentBook(library) {
-    console.log(this.isRentable);
-    console.log(this);
     library.listOfBooks = library.listOfBooks.filter(item => item !== this);
     library.listOfRentedBooks.push(this);
     this.toggleRentableStatus();
