@@ -79,8 +79,12 @@ class RentableBook extends Book {
     } else throw Error("Book has no ratings");
   }
 
-  rentBook() {
-    this.isRentable = this.toggleRentableStatus();
+  rentBook(library) {
+    console.log(this.isRentable);
+    console.log(this);
+    library.listOfBooks = library.listOfBooks.filter(item => item !== this);
+    library.listOfRentedBooks.push(this);
+    this.toggleRentableStatus();
     this.dateOfRent = moment().format();
     this.dateOfReturn = moment()
       .add(7, "days")
@@ -88,8 +92,12 @@ class RentableBook extends Book {
     return `Book ${this.title} has been rented`;
   }
 
-  returnBook() {
-    this.isRentable = this.toggleRentableStatus();
+  returnBook(library) {
+    this.toggleRentableStatus();
+    library.listOfBooks.push(this);
+    library.listOfRentedBooks = library.listOfRentedBooks.filter(
+      item => item !== this
+    );
     this.dateOfRent = "";
     this.dateOfReturn = "";
     const dateOfReturnedBook = moment().add(14, "days");
