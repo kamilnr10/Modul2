@@ -79,9 +79,7 @@ class RentableBook extends Book {
     } else throw Error("Book has no ratings");
   }
 
-  rentBook(library) {
-    library.listOfBooks = library.listOfBooks.filter(item => item !== this);
-    library.listOfRentedBooks.push(this);
+  rentBook() {
     this.toggleRentableStatus();
     this.dateOfRent = moment().format();
     this.dateOfReturn = moment()
@@ -90,15 +88,12 @@ class RentableBook extends Book {
     return `Book ${this.title} has been rented`;
   }
 
-  returnBook(library) {
+  returnBook() {
     this.toggleRentableStatus();
-    library.listOfBooks.push(this);
-    library.listOfRentedBooks = library.listOfRentedBooks.filter(
-      item => item !== this
-    );
     this.dateOfRent = "";
     this.dateOfReturn = "";
-    const dateOfReturnedBook = moment().add(14, "days");
+    this.isRentable = true;
+    const dateOfReturnedBook = moment();
     const dateOfReturnBook = moment(this.dateOfReturn);
     const rentDelayInDays = dateOfReturnedBook.diff(dateOfReturnBook, "days");
     if (rentDelayInDays > 0) {
@@ -175,16 +170,38 @@ class Library {
     return `Book/s has been added to Library`;
   }
 
-  deleteBookFromLibrary(book) {
-    if (this.isBookInLibrary(book)) {
-      this.listOfBooks = this.listOfBooks.filter(item => item !== book);
-      return `Book: ${book.title} has been deleted from Library`;
-    } else if (this.isBookRented(book)) {
+  deleteBookFromLibrary(id) {
+    if (this.isBookInLibrary(id)) {
+      this.listOfBooks = this.listOfBooks.filter(item => item.id !== id);
+      return `Book:  has been deleted from Library`;
+    } else if (this.isBookRented(id)) {
       this.listOfRentedBooks = this.listOfRentedBooks.filter(
-        item => item !== book
+        item => item.id !== id
       );
-      return `Book: ${book.title} has been deleted from Library`;
+      return `Book has been deleted from Library`;
     } else return "Book wasn't find in library";
+  }
+
+  rentBook(id) {
+    const rentingBook = this.listOfBooks.filter(item => item.id === id)[0];
+    if (rentingBook.isRentable) {
+      rentingBook.rentBook();
+      this.listOfRentedBooks.push(rentingBook);
+      this.deleteBookFromLibrary(id);
+      return `Book ${rentingBook.title} has been rented`;
+    }
+  }
+
+  returnBook(id) {
+    const returningBook = this.listOfRentedBooks.filter(
+      item => item.id === id
+    )[0];
+    if (returningBook.isRentable === false) {
+      this.deleteBookFromLibrary(id);
+      returningBook.returnBook();
+      this.addBooksToLibrary(returningBook);
+      return `Book ${returningBook.title} has been returned to library`;
+    } else return `There is no ${returningBook.title} in library`;
   }
 
   showAllBooks() {
@@ -212,20 +229,18 @@ class Library {
     return `${listOfRentedBooks}`;
   }
 
-  isBookInLibrary(book) {
+  isBookInLibrary(id) {
     const findBook = this.listOfBooks.filter(item => {
-      return item === book;
+      return item.id === id;
     })[0];
-    if (findBook) {
-      return true;
-    } else return false;
+    return findBook ? true : false;
   }
 
-  isBookRented(book) {
+  isBookRented(id) {
     const findBook = this.listOfRentedBooks.filter(item => {
-      return item === book;
+      return item.id === id;
     })[0];
-    if (findBook.isRentable == false) {
+    if (findBook.isRentable === false) {
       return true;
     } else return false;
   }
